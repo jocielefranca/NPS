@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparativo NPS: Alta Vista vs Mirante</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            margin: -30px auto 60px;
+            max-width: 800px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #64748b;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Overview Section */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .overview-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .alta-vista-icon { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; }
+        .mirante-icon { background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* Problem Categories */
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .problem-category {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .hydraulic { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .materials { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .structural { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .electrical { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .problems-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .building-problems {
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #f1f5f9;
+        }
+
+        .alta-vista-problems {
+            border-left: 4px solid #ff6b6b;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(238, 90, 36, 0.05));
+        }
+
+        .mirante-problems {
+            border-left: 4px solid #4ecdc4;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.05), rgba(68, 160, 141, 0.05));
+        }
+
+        .building-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .problem-list {
+            list-style: none;
+        }
+
+        .problem-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            color: #475569;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .problem-list li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .problem-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Sentiment Analysis */
+        .sentiment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .sentiment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .sentiment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .sentiment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 20px;
+        }
+
+        .negative-sentiment { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .positive-sentiment { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+
+        .quote {
+            background: #f8fafc;
+            border-left: 4px solid #e2e8f0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-style: italic;
+            color: #475569;
+            position: relative;
+        }
+
+        .quote:before {
+            content: '"';
+            font-size: 3rem;
+            color: #cbd5e1;
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            font-family: serif;
+        }
+
+        /* Comparative Table */
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            font-weight: 700;
+            color: #1e293b;
+            position: sticky;
+            top: 0;
+        }
+
+        .table td {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .table tr:hover {
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        /* Suggestions Section */
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .suggestion-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .suggestion-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .suggestion-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .suggestion-text {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .header p { font-size: 1.1rem; }
+            .nav-tabs { flex-direction: column; margin: -20px auto 40px; }
+            .problems-comparison { grid-template-columns: 1fr; }
+            .overview-card, .problem-category, .sentiment-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-chart-line"></i> Comparativo NPS</h1>
+            <p>Análise detalhada: Alta Vista vs Mirante</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">
+                <i class="fas fa-home"></i> Visão Geral
+            </button>
+            <button class="nav-tab" onclick="showSection('problems')">
+                <i class="fas fa-exclamation-triangle"></i> Problemas
+            </button>
+            <button class="nav-tab" onclick="showSection('sentiment')">
+                <i class="fas fa-heart"></i> Sentimentos
+            </button>
+            <button class="nav-tab" onclick="showSection('comparison')">
+                <i class="fas fa-balance-scale"></i> Comparativo
+            </button>
+            <button class="nav-tab" onclick="showSection('suggestions')">
+                <i class="fas fa-lightbulb"></i> Sugestões
+            </button>
+        </div>
+    </div>
+
+    <!-- Overview Section -->
+    <div id="overview" class="content-section active">
+        <div class="container">
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="card-icon alta-vista-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="card-title">Alta Vista</h3>
+                    <p class="card-subtitle">Principais desafios identificados</p>
+                    <ul class="problem-list">
+                        <li>Problemas críticos de infraestrutura hidráulica</li>
+                        <li>Materiais de baixa qualidade generalizados</li>
+                        <li>Infiltrações graves durante chuvas</li>
+                        <li>Problemas elétricos com disjuntores</li>
+                        <li>Atendimento pós-venda muito deficiente</li>
+                    </ul>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon mirante-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="card-title">Mirante</h3>
+                    <p class="card-subtitle">Principais desafios identificados</p>
+                    <ul class="problem-list">
+                        <li>Problemas pontuais de infraestrutura</li>
+                        <li>Qualidade de acabamentos comprometida</li>
+                        <li>Fissuras em áreas comuns</li>
+                        <li>Planejamento inadequado para ar condicionado</li>
+                        <li>Serviços iniciados e não concluídos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problems Section -->
+    <div id="problems" class="content-section">
+        <div class="container">
+            <div class="problems-grid">
+                <!-- Infraestrutura Hidráulica -->
+                <div class="problem-category">
+                    <div class="category-header">
+                        <div class="category-icon hydraulic">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h3 class="category-title">Infraestrutura Hidráulica</h3>
+                    </div>
+                    <div class="problems-comparison">
+                        <div class="building-problems alta-vista-problems">
+                            <h4 class="building-name">Alta Vista</h4>
+                            <ul class="problem-list">
+                                <li>Falta de água recorrente/constante</li>
+                                <li>Problemas com bombas d'água</li>
+                                <li>Vazamentos em canos/encanações</li>
+                                <li>Canos estourados</li>
+                                <li>Problemas na cisterna</li>
+                                <li>Registros que não fecham totalmente</li>
+                            </ul>
+                        </div>
+                        <div class="building-problems mirante-problems">
+                            <h4 class="building-name">Mirante</h4>
+                            <ul class="problem-list">
+                                <li>Vazamentos pontuais</li>
+                                <li>Canos sem cola/fixação adequada</li>
+                                <li>Falta de água (um bloco específico)</li>
+                                <li>Sistema dependente de energia</li>
+                                <li>Falta de ralos adequados nos banheiros</li>
+                                <li>Problemas com drenos de ar condicionado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Qualidade dos Materiais -->
+                <div class="problem-category">
+                    <div class="category-header">
+                        <div class="category-icon materials">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <h3 class="category-title">Qualidade dos Materiais</h3>
+                    </div>
+                    <div class="problems-comparison">
+                        <div class="building-problems alta-vista-problems">
+                            <h4 class="building-name">Alta Vista</h4>
+                            <ul class="problem-list">
+                                <li>Materiais de baixa qualidade em geral</li>
+                                <li>Torneiras que pingam ou tremem</li>
+                                <li>Problemas de acabamento</li>
+                                <li>Portas que não fecham adequadamente</li>
+                                <li>Problemas com trincos</li>
+                                <li>Caixa de descarga de má qualidade</li>
+                            </ul>
+                        </div>
+                        <div class="building-problems mirante-problems">
+                            <h4 class="building-name">Mirante</h4>
+                            <ul class="problem-list">
+                                <li>Tomadas de baixa qualidade</li>
+                                <li>Acabamento ruim/de baixa qualidade</li>
+                                <li>Torneiras com vazamentos</li>
+                                <li>Materiais hidráulicos de baixa qualidade</li>
+                                <li>Pintura considerada inadequada</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problemas Estruturais -->
+                <div class="problem-category">
+                    <div class="category-header">
+                        <div class="category-icon structural">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="category-title">Problemas Estruturais</h3>
+                    </div>
+                    <div class="problems-comparison">
+                        <div class="building-problems alta-vista-problems">
+                            <h4 class="building-name">Alta Vista</h4>
+                            <ul class="problem-list">
+                                <li>Infiltrações durante chuvas</li>
+                                <li>Água nos corredores e halls</li>
+                                <li>Problemas nas janelas/esquadrias</li>
+                                <li>Elevadores desligados por infiltrações</li>
+                                <li>Piso vinílico com ruídos</li>
+                                <li>Escoamento inadequado da água da chuva</li>
+                            </ul>
+                        </div>
+                        <div class="building-problems mirante-problems">
+                            <h4 class="building-name">Mirante</h4>
+                            <ul class="problem-list">
+                                <li>Fissuras nas áreas comuns</li>
+                                <li>Acabamentos com defeitos</li>
+                                <li>Soleiras faltando (casos pontuais)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problemas Elétricos -->
+                <div class="problem-category">
+                    <div class="category-header">
+                        <div class="category-icon electrical">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="category-title">Problemas Elétricos</h3>
+                    </div>
+                    <div class="problems-comparison">
+                        <div class="building-problems alta-vista-problems">
+                            <h4 class="building-name">Alta Vista</h4>
+                            <ul class="problem-list">
+                                <li>Capacidade insuficiente de disjuntores</li>
+                                <li>Quedas de energia frequentes</li>
+                                <li>Limitação na instalação de ar condicionado</li>
+                                <li>Voltagem errada em chuveiros</li>
+                                <li>Quantidade insuficiente de disjuntores</li>
+                            </ul>
+                        </div>
+                        <div class="building-problems mirante-problems">
+                            <h4 class="building-name">Mirante</h4>
+                            <ul class="problem-list">
+                                <li>Problemas com tomadas</li>
+                                <li>Falta de luz (um bloco)</li>
+                                <li>Falta de planejamento para ar condicionado</li>
+                                <li>Tubulação dos ar-condicionados inadequada</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sentiment Section -->
+    <div id="sentiment" class="content-section">
+        <div class="container">
+            <div class="sentiment-grid">
+                <div class="sentiment-card">
+                    <div class="sentiment-header">
+                        <div class="sentiment-icon negative-sentiment">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Alta Vista - Sentimentos Negativos</h3>
+                            <p class="card-subtitle">Expressões de forte decepção</p>
+                        </div>
+                    </div>
+                    <div class="quote">
+                        Se tem um arrependimento na minha vida, foi ter adquirido este imóvel
+                    </div>
+                    <div class="quote">
+                        O que deveria ser motivo de alegria, hoje é motivo de tristeza e arrependimento
+                    </div>
+                    <div class="quote">
+                        O que era pra ser um sonho se tornou uma frustação
+                    </div>
+                    <div class="quote">
+                        Atendimento da VICTA não é ruim não, ele é péssimo
+                    </div>
+                </div>
+
+                <div class="sentiment-card">
+                    <div class="sentiment-header">
+                        <div class="sentiment-icon positive-sentiment">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Alta Vista - Pontos Positivos</h3>
+                            <p class="card-subtitle">Reconhecimento de qualidades</p>
+                        </div>
+                    </div>
+                    <div class="quote">
+                        A decoração dos espaços de lazer ficaram lindas
+                    </div>
+                    <div class="quote">
+                        Os espaços de lazer têm um projeto bem executado
+                    </div>
+                    <div class="quote">
+                        A planta, as áreas de lazer são de primeira
+                    </div>
+                    <div class="quote">
+                        Estou bastante satisfeito com tudo
+                    </div>
+                </div>
+
+                <div class="sentiment-card">
+                    <div class="sentiment-header">
+                        <div class="sentiment-icon negative-sentiment">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Mirante - Sentimentos</h3>
+                            <p class="card-subtitle">Decepção, mas menos intensa</p>
+                        </div>
+                    </div>
+                    <div class="quote">
+                        Um completo desastre
+                    </div>
+                    <div class="quote">
+                        Sabemos que são muitas unidades, mas a rapidez em resolução de problemas nas instalações ainda estão demorando muito
+                    </div>
+                    <p style="color: #64748b; font-style: italic; margin-top: 20px;">
+                        <strong>Observação:</strong> Para o Mirante, não foram identificados pontos positivos explícitos nos comentários analisados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Table Section -->
+    <div id="comparison" class="content-section">
+        <div class="container">
+            <div class="comparison-table">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #1e293b;">
+                    <i class="fas fa-balance-scale"></i> Tabela Comparativa Detalhada
+                </h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Categoria</th>
+                            <th style="width: 40%;">Alta Vista</th>
+                            <th style="width: 40%;">Mirante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Infraestrutura Hidráulica</strong></td>
+                            <td>• Falta de água recorrente/constante<br>• Problemas com bombas d'água<br>• Vazamentos em canos/encanações<br>• Canos estourados<br>• Problemas na cisterna</td>
+                            <td>• Vazamentos pontuais<br>• Canos sem cola/fixação adequada<br>• Falta de água (um bloco)<br>• Sistema dependente de energia<br>• Falta de ralos adequados</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Qualidade dos Materiais</strong></td>
+                            <td>• Materiais de baixa qualidade em geral<br>• Torneiras que pingam ou tremem<br>• Problemas de acabamento<br>• Portas que não fecham adequadamente</td>
+                            <td>• Tomadas de baixa qualidade<br>• Acabamento ruim<br>• Torneiras com vazamentos<br>• Materiais hidráulicos de baixa qualidade<br>• Pintura de baixa qualidade</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Problemas Estruturais</strong></td>
+                            <td>• Infiltrações durante chuvas<br>• Água nos corredores e halls<br>• Problemas nas janelas/esquadrias<br>• Elevadores desligados por infiltrações</td>
+                            <td>• Fissuras nas áreas comuns<br>• Acabamentos com defeitos<br>• Soleiras faltando</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Problemas Elétricos</strong></td>
+                            <td>• Capacidade insuficiente de disjuntores<br>• Quedas de energia<br>• Limitação na instalação de ar condicionado<br>• Voltagem errada em chuveiros</td>
+                            <td>• Problemas com tomadas<br>• Falta de luz (um bloco)<br>• Falta de planejamento para ar condicionado</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sentimentos Expressos</strong></td>
+                            <td>• "Arrependimento na vida"<br>• "Tristeza e arrependimento"<br>• "Sonho se tornou frustação"<br>• Fortes expressões de decepção</td>
+                            <td>• "Um completo desastre"<br>• Sugestão de separação das construtoras<br>• Decepção, mas menos intensa que no Alta Vista</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pontos Positivos</strong></td>
+                            <td>• Design e decoração das áreas de lazer<br>• "Os espaços de lazer são de primeira"<br>• Um comentário de satisfação total</td>
+                            <td>• Nenhum ponto positivo explícito identificado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions Section -->
+    <div id="suggestions" class="content-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px; color: #1e293b;">
+                <i class="fas fa-lightbulb"></i> Sugestões dos Moradores
+            </h2>
+            <div class="suggestions-grid">
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="suggestion-title">Melhorar Qualidade dos Materiais</h3>
+                    <p class="suggestion-text">
+                        Ambos os condomínios sugerem utilizar produtos de maior qualidade e durabilidade, especialmente nas instalações hidráulicas e acabamentos.
+                    </p>
+                </div>
+
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="suggestion-title">Inspeção Mais Rigorosa</h3>
+                    <p class="suggestion-text">
+                        No Mirante, sugerem fazer vistoria apartamento por apartamento antes da entrega e melhorar acabamentos e testes.
+                    </p>
+                </div>
+
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="suggestion-title">Maior Transparência</h3>
+                    <p class="suggestion-text">
+                        No Alta Vista, pedem ter honestidade com o cliente sobre o que realmente vai ter no condomínio.
+                    </p>
+                </div>
+
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h3 class="suggestion-title">Melhorar Projetos</h3>
+                    <p class="suggestion-text">
+                        Evitar erros "que beiram o amadorismo" e repensar o posicionamento dos furos para ar condicionado.
+                    </p>
+                </div>
+
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="suggestion-title">Atendimento Mais Ágil</h3>
+                    <p class="suggestion-text">
+                        Maior velocidade nos retornos e soluções para os problemas relatados pelos moradores.
+                    </p>
+                </div>
+
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="suggestion-title">Equipe Adequada</h3>
+                    <p class="suggestion-text">
+                        Dimensionar adequadamente as equipes de manutenção e pós-venda para atender a demanda.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Insights -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 50px; margin: 60px 0; color: white; text-align: center;">
+                <h2 style="color: white; margin-bottom: 30px;">
+                    <i class="fas fa-key"></i> Principais Insights
+                </h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px;">
+                        <h3 style="color: white; margin-bottom: 15px;">Alta Vista</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Problemas mais críticos e generalizados, com forte impacto emocional negativo nos moradores.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px;">
+                        <h3 style="color: white; margin-bottom: 15px;">Mirante</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Problemas mais pontuais e controlados, mas ainda com necessidade de melhorias significativas.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px;">
+                        <h3 style="color: white; margin-bottom: 15px;">Oportunidade</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Implementação de melhorias pode transformar a experiência dos moradores e a reputação da empresa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2024 Análise Comparativa NPS - Apresentação Executiva</p>
+            <p style="margin-top: 10px; opacity: 0.8;">
+                <i class="fas fa-chart-bar"></i> Relatório baseado em feedback real dos moradores
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Smooth scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Add smooth scrolling animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.overview-card, .problem-category, .sentiment-card, .suggestion-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+
+        // Add click animation to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.overview-card, .problem-category, .sentiment-card, .suggestion-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
