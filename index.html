@@ -167,15 +167,15 @@
         /* Problem Categories */
         .problems-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr;
+            gap: 40px;
             margin-bottom: 60px;
         }
 
         .problem-category {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             border: 1px solid #e2e8f0;
         }
@@ -183,18 +183,20 @@
         .category-header {
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            justify-content: center;
+            text-align: center;
         }
 
         .category-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 20px;
+            margin-right: 20px;
+            font-size: 24px;
             color: white;
         }
 
@@ -204,7 +206,7 @@
         .electrical { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 
         .category-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #1e293b;
         }
@@ -212,13 +214,17 @@
         .problems-comparison {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
+            align-items: start;
         }
 
         .building-problems {
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             border: 2px solid #f1f5f9;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
         }
 
         .alta-vista-problems {
@@ -233,22 +239,27 @@
 
         .building-name {
             font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
             color: #1e293b;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
         }
 
         .problem-list {
             list-style: none;
+            flex: 1;
         }
 
         .problem-list li {
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(0,0,0,0.05);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #475569;
             position: relative;
-            padding-left: 20px;
+            padding-left: 25px;
+            line-height: 1.5;
         }
 
         .problem-list li:before {
@@ -257,6 +268,7 @@
             left: 0;
             color: #64748b;
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
         .problem-list li:last-child {
@@ -422,8 +434,19 @@
             .header h1 { font-size: 2.5rem; }
             .header p { font-size: 1.1rem; }
             .nav-tabs { flex-direction: column; margin: -20px auto 40px; }
-            .problems-comparison { grid-template-columns: 1fr; }
+            .problems-comparison { 
+                grid-template-columns: 1fr; 
+                gap: 20px;
+            }
             .overview-card, .problem-category, .sentiment-card { padding: 25px; }
+            .problem-category { padding: 30px 20px; }
+            .category-header { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 15px;
+            }
+            .category-icon { margin-right: 0; }
+            .building-problems { min-height: auto; }
         }
     </style>
 </head>
